@@ -17,8 +17,6 @@ public class MatrixMultiplication {
             this.block = block;
         }
 
-
-
         @Override
         public void run() {
             /*
