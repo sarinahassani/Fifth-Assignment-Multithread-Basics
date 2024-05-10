@@ -54,6 +54,8 @@ public class TaskScheduler
         for (Task task : tasks) {
             times.add(task.processingTime);
         }*/
+
+
         for (int i=0; i<tasks.size(); i++) {
             for (int j=0; j<tasks.size(); j++) {
                 if (tasks.get(i).processingTime > tasks.get(j).processingTime) {
