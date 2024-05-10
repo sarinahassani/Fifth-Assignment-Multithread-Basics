@@ -34,7 +34,9 @@ public class MatrixMultiplicationTest {
                 matrix.add(row);
             }
         } catch (IOException e) {
+
             e.printStackTrace();
+
         }
         return matrix;
     }
