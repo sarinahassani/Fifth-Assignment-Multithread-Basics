@@ -41,6 +41,9 @@ public class MatrixMultiplicationTest {
         return matrix;
     }
 
+
+
+
     @Test
     public void testParallelizeMatMul() throws InterruptedException {
         Assertions.assertEquals(matrix_C, MatrixMultiplication.ParallelizeMatMul(matrix_A, matrix_B));
