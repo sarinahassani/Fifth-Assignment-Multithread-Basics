@@ -15,8 +15,8 @@ public class MatrixMultiplication {
             // TODO
             this.matrix_B = matrix_B;
             this.block = block;
+            tempMatrixProduct = new ArrayList<>();
         }
-
 
         @Override
         public void run() {
@@ -31,9 +31,10 @@ public class MatrixMultiplication {
                     for (int j = 0; j < block.get(i).size(); j++) {
                         sum += (block.get(i).get(j)) * (matrix_B.get(j).get(k));
                     }
-                    line.set(k, sum);
+                    line.add(sum);
                 }
-                tempMatrixProduct.set(i, line);
+                tempMatrixProduct.add(line);
+                System.out.println(tempMatrixProduct);
             }
         }
     }
@@ -50,35 +51,39 @@ public class MatrixMultiplication {
             Each thread should calculate one block of the final matrix product. Each block should be a quarter of the final matrix.
             Combine the 4 resulting blocks to create the final matrix product and return it.
          */
-        List<List<Integer>> matrix_C = new ArrayList<>();
-        int num = (matrix_A.size())/4;
+
+        List<List<Integer>> answerMatrix = new ArrayList<>();
+
+        int size = (matrix_A.size())/4;
         List<List<Integer>> block1 = new ArrayList<>();
-        for (int i=0; i<num; i++) {
-            block1.set(i, matrix_A.get(i));
+
+        for (int i=0; i<size; i++) {
+            block1.add(matrix_A.get(i));
         }
+
         BlockMultiplier Block1 = new BlockMultiplier(matrix_B, block1);
         Thread thread1 = new Thread(Block1);
 
         List<List<Integer>> block2 = new ArrayList<>();
-        for (int i=0; i<num; i++) {
-            block2.set(i, matrix_A.get(i+num));
+        for (int i=0; i<size; i++) {
+            block2.add(matrix_A.get(i+size));
         }
         BlockMultiplier Block2 = new BlockMultiplier(matrix_B, block2);
-        Thread thread2 = new Thread(Block1);
+        Thread thread2 = new Thread(Block2);
 
         List<List<Integer>> block3 = new ArrayList<>();
-        for (int i=0; i<num; i++) {
-            block3.set(i, matrix_A.get(i+(2*num)));
+        for (int i=0; i<size; i++) {
+            block3.add(matrix_A.get(i+(2*size)));
         }
         BlockMultiplier Block3 = new BlockMultiplier(matrix_B, block3);
-        Thread thread3 = new Thread(Block1);
+        Thread thread3 = new Thread(Block3);
 
         List<List<Integer>> block4 = new ArrayList<>();
-        for (int i=0; i<num; i++) {
-            block3.set(i, matrix_A.get(i+(3*num)));
+        for (int i=0; i<size; i++) {
+            block4.add(matrix_A.get(i+(3*size)));
         }
-        BlockMultiplier Block4 = new BlockMultiplier(matrix_B, block3);
-        Thread thread4 = new Thread(Block1);
+        BlockMultiplier Block4 = new BlockMultiplier(matrix_B, block4);
+        Thread thread4 = new Thread(Block4);
 
         thread1.start();
         thread2.start();
@@ -93,23 +98,67 @@ public class MatrixMultiplication {
         } catch (InterruptedException e) {
             System.out.println(e.getMessage());
         }
-        for (int i=0; i<num; i++) {
-            matrix_C.add(Block1.tempMatrixProduct.get(i));
+        for (int i=0; i<size; i++) {
+            answerMatrix.add(Block1.tempMatrixProduct.get(i));
         }
-        for (int i=0; i<num; i++) {
-            matrix_C.add(Block2.tempMatrixProduct.get(i));
+        for (int i=0; i<size; i++) {
+            answerMatrix.add(Block2.tempMatrixProduct.get(i));
         }
-        for (int i=0; i<num; i++) {
-            matrix_C.add(Block3.tempMatrixProduct.get(i));
+        for (int i=0; i<size; i++) {
+            answerMatrix.add(Block3.tempMatrixProduct.get(i));
         }
-        for (int i=0; i<num; i++) {
-            matrix_C.add(Block4.tempMatrixProduct.get(i));
+        for (int i=0; i<size; i++) {
+            answerMatrix.add(Block4.tempMatrixProduct.get(i));
         }
 
-        return matrix_C;
+        return answerMatrix;
     }
 
     public static void main(String[] args) {
         // Test your code here
+        List <List <Integer>> matrix_A = new ArrayList <> ();
+        List <List <Integer>> matrix_B = new ArrayList <> ();
+
+        //initialize matrix A
+        matrix_A.add (List.of (1, 2, 3, 4));
+        matrix_A.add (List.of (4, 3, 2, 1));
+        matrix_A.add (List.of (1, 2, 3, 4));
+        matrix_A.add (List.of (4, 3, 2, 1));
+
+        //initialize matrix B
+        matrix_B.add (List.of (1, 4, 1, 4));
+        matrix_B.add (List.of (2, 3, 2, 3));
+        matrix_B.add (List.of (3, 2, 3, 2));
+        matrix_B.add (List.of (4, 1, 4, 1));
+
+        List <List <Integer>> result = null; //perform matrix multiplication
+        try {
+            result = MatrixMultiplication.ParallelizeMatMul (matrix_A, matrix_B);
+        }
+        catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        //print the result matrix
+        System.out.println ("First Matrix:");
+        for (List <Integer> row : matrix_A)
+        {
+            System.out.println (row);
+        }
+        System.out.println ();
+
+        System.out.println ("Second Matrix:");
+        for (List <Integer> row : matrix_B)
+        {
+            System.out.println (row);
+        }
+        System.out.println ();
+
+        System.out.println ("Result Matrix:");
+        for (List <Integer> row : result)
+        {
+            System.out.println (row);
+        }
+
     }
 }

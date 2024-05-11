@@ -4,18 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TaskScheduler
-{
-    public static class Task implements Runnable
-    {
+public class TaskScheduler {
+    public static class Task implements Runnable {
         /*
             ------------------------- You don't need to modify this part of the code -------------------------
          */
         String taskName;
-        int processingTime;
+        int    processingTime;
 
         public Task(String taskName, int processingTime) {
-            this.taskName = taskName;
+            this.taskName       = taskName;
             this.processingTime = processingTime;
         }
         /*
@@ -28,21 +26,29 @@ public class TaskScheduler
             TODO
                 Simulate utilizing CPU by sleeping the thread for the specified processingTime
              */
+            try {
+                Thread.sleep(processingTime);
+            }
+            catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
-    public static ArrayList<String> doTasks(ArrayList<Task> tasks)
-    {
+    public static ArrayList<String> doTasks(ArrayList<Task> tasks) {
         ArrayList<String> finishedTasks = new ArrayList<>();
-        ArrayList<Thread> threads = new ArrayList<>();
-        for (int i=0; i<tasks.size(); i++) {
+        ArrayList<Thread> threads       = new ArrayList<>();
+
+        tasks.sort((t1, t2) -> t2.processingTime - t1.processingTime);
+
+        for (int i = 0; i < tasks.size(); i++) {
             Thread thread = new Thread(tasks.get(i));
             threads.set(i, thread);
         }
-        for (int i=0; i<threads.size(); i++) {
+        for (int i = 0; i < threads.size(); i++) {
             threads.get(i).start();
         }
-        for (int i=0; i<threads.size(); i++) {
+        for (int i = 0; i < threads.size(); i++) {
             try {
                 threads.get(i).join();
             }
@@ -50,13 +56,7 @@ public class TaskScheduler
                 System.out.println(e.getMessage());
             }
         }
-        /*List times = new ArrayList<>();
-        for (Task task : tasks) {
-            times.add(task.processingTime);
-        }*/
-
-
-        for (int i=0; i<tasks.size(); i++) {
+        /*for (int i=0; i<tasks.size(); i++) {
             for (int j=0; j<tasks.size(); j++) {
                 if (tasks.get(i).processingTime > tasks.get(j).processingTime) {
                     Task temp = tasks.get(i);
@@ -68,7 +68,7 @@ public class TaskScheduler
         }
         for (int i=0; i<tasks.size(); i++) {
             finishedTasks.set(i, tasks.get(i).taskName);
-        }
+        }*/
         /*
         TODO
             Create a thread for each given task, And then start them based on which task has the highest priority
