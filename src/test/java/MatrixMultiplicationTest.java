@@ -34,13 +34,19 @@ public class MatrixMultiplicationTest {
                 matrix.add(row);
             }
         } catch (IOException e) {
+
             e.printStackTrace();
+
         }
         return matrix;
     }
 
+
+
+
+
     @Test
-    public void testParallelizeMatMul() {
+    public void testParallelizeMatMul() throws InterruptedException {
         Assertions.assertEquals(matrix_C, MatrixMultiplication.ParallelizeMatMul(matrix_A, matrix_B));
     }
 }

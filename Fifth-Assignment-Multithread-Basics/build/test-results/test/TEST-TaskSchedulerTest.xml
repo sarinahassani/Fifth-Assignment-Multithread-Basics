@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="TaskSchedulerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-05-11T21:28:31" hostname="DESKTOP-75KRCSF" time="1.073">
+  <properties/>
+  <testcase name="test1()" classname="TaskSchedulerTest" time="1.073"/>
+  <system-out><![CDATA[F is running
+F completed
+C is running
+C completed
+B is running
+B completed
+E is running
+E completed
+A is running
+A completed
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
